@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Code Navigator</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-labelledby="app-title">
+        <div class="intro">
+          <p class="eyebrow">Prompt Experience Design System</p>
+          <h1 id="app-title">Code Navigator</h1>
+          <p class="description">
+            Paste code, choose a behavior mode, and get a consistent structured explanation.
+          </p>
+        </div>
+
+        <form id="navigator-form" class="analysis-form">
+          <div class="controls">
+            <label for="mode">Mode</label>
+            <select id="mode" name="mode">
+              <option value="beginner">Beginner</option>
+              <option value="debug">Debug</option>
+              <option value="architecture">Architecture</option>
+            </select>
+          </div>
+
+          <section class="mode-contract" aria-labelledby="mode-contract-title">
+            <div>
+              <p class="eyebrow">Mode Contract</p>
+              <h2 id="mode-contract-title">Beginner mode</h2>
+            </div>
+            <p id="mode-tone" class="mode-tone">
+              Simple language, short analogies, and step-by-step explanation.
+            </p>
+            <div class="contract-grid">
+              <div>
+                <h3>Output structure</h3>
+                <ol id="mode-structure"></ol>
+              </div>
+              <div>
+                <h3>Fallback behavior</h3>
+                <ul id="mode-fallbacks"></ul>
+              </div>
+            </div>
+          </section>
+
+          <label class="code-label" for="code-input">Code input</label>
+          <textarea
+            id="code-input"
+            name="code"
+            spellcheck="false"
+            placeholder="Paste a function, component, class, or code block here..."
+          ></textarea>
+
+          <div class="actions">
+            <button type="submit" id="analyze-button">Analyze code</button>
+            <button type="button" id="clear-button" class="secondary">Clear</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="output-panel" aria-labelledby="output-title">
+        <div class="output-header">
+          <div>
+            <p class="eyebrow">Structured Output</p>
+            <h2 id="output-title">Explanation</h2>
+          </div>
+          <span id="status" class="status">Ready</span>
+        </div>
+        <pre id="output" class="output">The structured explanation will appear here.</pre>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
