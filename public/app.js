@@ -75,6 +75,110 @@ function setBusy(isBusy) {
   codeInput.disabled = isBusy;
 }
 
+function getSectionTone(heading) {
+  const normalized = heading.toLowerCase();
+
+  if (normalized.includes("risk") || normalized.includes("uncertainty") || normalized.includes("failure")) {
+    return "risk";
+  }
+
+  if (normalized.includes("question")) {
+    return "question";
+  }
+
+  if (normalized.includes("suggested") || normalized.includes("next step")) {
+    return "next";
+  }
+
+  if (normalized.includes("suspicious") || normalized.includes("edge")) {
+    return "warning";
+  }
+
+  if (normalized.includes("summary")) {
+    return "summary";
+  }
+
+  return "neutral";
+}
+
+function appendParagraph(section, text) {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+  section.append(paragraph);
+}
+
+function appendBullet(section, text) {
+  let list = section.querySelector("ul");
+
+  if (!list) {
+    list = document.createElement("ul");
+    section.append(list);
+  }
+
+  const item = document.createElement("li");
+  item.textContent = text;
+  list.append(item);
+}
+
+function createOutputSection(heading) {
+  const section = document.createElement("section");
+  section.className = "output-section";
+  section.dataset.tone = getSectionTone(heading);
+
+  const title = document.createElement("h3");
+  title.textContent = heading;
+  section.append(title);
+
+  return section;
+}
+
+function renderOutput(text, emptyMessage = "No output returned.") {
+  output.replaceChildren();
+
+  if (!text.trim()) {
+    const placeholder = document.createElement("p");
+    placeholder.className = "output-placeholder";
+    placeholder.textContent = emptyMessage;
+    output.append(placeholder);
+    return;
+  }
+
+  const lines = text.split(/\r?\n/);
+  let currentSection;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      continue;
+    }
+
+    const headingMatch = trimmed.match(/^#{1,3}\s+(.+)$/);
+
+    if (headingMatch) {
+      currentSection = createOutputSection(headingMatch[1]);
+      output.append(currentSection);
+      continue;
+    }
+
+    if (!currentSection) {
+      currentSection = createOutputSection("Response");
+      output.append(currentSection);
+    }
+
+    const bulletMatch = trimmed.match(/^[-*]\s+(.+)$/);
+    const numberedMatch = trimmed.match(/^\d+\.\s+(.+)$/);
+
+    if (bulletMatch) {
+      appendBullet(currentSection, bulletMatch[1]);
+    } else if (numberedMatch) {
+      appendBullet(currentSection, numberedMatch[1]);
+    } else {
+      appendParagraph(currentSection, trimmed);
+    }
+  }
+}
+
 function renderList(element, items) {
   element.replaceChildren();
 
@@ -105,7 +209,7 @@ form.addEventListener("submit", async (event) => {
   const mode = modeInput.value;
 
   if (!code) {
-    output.textContent = "Paste code before requesting an explanation.";
+    renderOutput("## Input needed\n- Paste code before requesting an explanation.");
     setStatus("Input needed", "error");
     codeInput.focus();
     return;
@@ -113,7 +217,7 @@ form.addEventListener("submit", async (event) => {
 
   setBusy(true);
   setStatus("Analyzing", "loading");
-  output.textContent = "Generating structured explanation...";
+  renderOutput("## Analyzing\n- Generating structured explanation...");
 
   try {
     const response = await fetch("/api/analyze", {
@@ -130,10 +234,11 @@ form.addEventListener("submit", async (event) => {
       throw new Error(data.error || "Analysis failed.");
     }
 
-    output.textContent = data.output || "No output returned.";
+    renderOutput(data.output || "");
     setStatus(response.status === 413 ? "Fallback" : `${data.mode} mode`, "success");
   } catch (error) {
-    output.textContent = error instanceof Error ? error.message : "Unexpected error.";
+    const message = error instanceof Error ? error.message : "Unexpected error.";
+    renderOutput(`## Error\n- ${message}`);
     setStatus("Error", "error");
   } finally {
     setBusy(false);
@@ -142,9 +247,10 @@ form.addEventListener("submit", async (event) => {
 
 clearButton.addEventListener("click", () => {
   codeInput.value = "";
-  output.textContent = "The structured explanation will appear here.";
+  renderOutput("", "The structured explanation will appear here.");
   setStatus("Ready");
   codeInput.focus();
 });
 
 updateModeContract(modeInput.value);
+renderOutput("", "The structured explanation will appear here.");

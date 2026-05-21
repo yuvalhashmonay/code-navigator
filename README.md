@@ -2,6 +2,8 @@
 
 AI-powered code explanation tool that lets users paste code and choose an explanation mode: Beginner, Debug, or Architecture. Each mode uses tailored prompt behavior to generate different styles of structured responses, from simple step-by-step explanations to technical debugging insights and system-level architecture overviews.
 
+![Code Navigator interface](docs/code-navigator-screenshot.png)
+
 ## AI Generation Disclosure
 
 This project was generated and implemented with AI assistance as part of a portfolio exercise. It is intended to demonstrate prompt experience design, structured AI interaction patterns, and product thinking around LLM behavior. The code was not hand-written end to end by the portfolio owner.
