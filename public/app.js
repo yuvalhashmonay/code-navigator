@@ -98,6 +98,16 @@ function getSectionTone(heading) {
     return "summary";
   }
 
+  if (
+    normalized.includes("observation") ||
+    normalized.includes("walkthrough") ||
+    normalized.includes("component") ||
+    normalized.includes("data flow") ||
+    normalized.includes("responsibilities")
+  ) {
+    return "analysis";
+  }
+
   return "neutral";
 }
 

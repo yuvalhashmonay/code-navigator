@@ -275,9 +275,9 @@ button.secondary:hover {
 
 .output-section {
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 5px solid #8ab99f;
+  border-left: 5px solid #9aa8b3;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.055);
+  background: rgba(154, 168, 179, 0.12);
   padding: 14px;
 }
 
@@ -310,8 +310,13 @@ button.secondary:hover {
 }
 
 .output-section[data-tone="summary"] {
-  border-left-color: #7fc99a;
-  background: rgba(127, 201, 154, 0.13);
+  border-left-color: #78b7ff;
+  background: rgba(120, 183, 255, 0.15);
+}
+
+.output-section[data-tone="analysis"] {
+  border-left-color: #55c7b4;
+  background: rgba(85, 199, 180, 0.14);
 }
 
 .output-section[data-tone="risk"] {
@@ -325,13 +330,13 @@ button.secondary:hover {
 }
 
 .output-section[data-tone="question"] {
-  border-left-color: #83b5e5;
-  background: rgba(131, 181, 229, 0.15);
+  border-left-color: #b99cff;
+  background: rgba(185, 156, 255, 0.15);
 }
 
 .output-section[data-tone="next"] {
-  border-left-color: #b6a0e6;
-  background: rgba(182, 160, 230, 0.15);
+  border-left-color: #7fc99a;
+  background: rgba(127, 201, 154, 0.15);
 }
 
 @media (max-width: 860px) {
